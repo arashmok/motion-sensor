@@ -1,7 +1,5 @@
-# A blank Mongoose OS app
+# Mongoose OS Motion detector application
 
 ## Overview
 
-This is an empty app, serves as a skeleton for building Mongoose OS
-apps from scratch.
-
+This application sends MQTT message to the broker when a movement detected (by a PIR sensor).
