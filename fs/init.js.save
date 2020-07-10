@@ -1,0 +1,30 @@
+load('api_config.js');
+load('api_gpio.js');
+load('api_mqtt.js');
+load('api_timer.js');
+
+let pin = 21;
+let enb_pin = 2;
+let topic = '/devices/esp32/events';
+let cmd_topic='/devices/esp32/cmd';
+#GPIO.write(enb_pin, 1);
+GPIO.set_mode(pin, GPIO.MODE_INPUT);
+
+GPIO.set_button_handler(pin, GPIO.PULL_DOWN, GPIO.INT_EDGE_ANY, 200, 
+function() {
+  let msg = JSON.stringify({ motion: GPIO.read(pin) });
+  if (GPIO.read(enb_pin)===true){
+    let ok = MQTT.pub(topic, msg, 1);
+    print(ok, msg);
+  }
+}, null);
+
+MQTT.sub(cmd_topic,
+function(conn, topic, msg) {
+  if (msg==='enable'){
+   GPIO.write(enb_pin, 1);
+  }
+  else if (msg==='disable'){
+   GPIO.write(enb_pin, 0);
+  }
+}, null);

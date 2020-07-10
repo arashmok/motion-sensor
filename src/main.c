@@ -16,6 +16,7 @@
  */
 
 #include "mgos.h"
+#include "mgos_gpio.h"
 
 static void timer_cb(void *arg) {
   static bool s_tick_tock = false;
